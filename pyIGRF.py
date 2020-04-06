@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-pyIGRF: code to synthesise IGRF values
+pyIGRF: code to synthesise magnetic field values from the 13th generation of the
+        International Geomagnetic Reference Field, released in December 2020
 
  @author: Ciaran Beggan (British Geological Survey)
  
- See https://www.ngdc.noaa.gov/IAGA/vmod/ 
+ See https://www.ngdc.noaa.gov/IAGA/vmod/ for information on the IGRF
  
  Based on existing codes: igrf13.f (FORTRAN) and chaosmagpy (Python3)
  
- With acknowledgements to Clemens Kloss (DTU Space), David Kerridge (BGS) and
-     Ashley Smith (Univ. of Edinburgh)
+ With acknowledgements to: Clemens Kloss (DTU Space), David Kerridge (BGS) and
+     Ashley Smith (Univ. of Edinburgh), william Brown and Grace Cox.
  
      This is a program for synthesising geomagnetic field values from the 
      International Geomagnetic Reference Field series of models as agreed
      in December 2019 by IAGA Working Group V-MOD. 
+     
      It is the 13th generation IGRF, ie the 12th revision. 
      The main-field models for 1900.0, 1905.0,..1940.0 and 2020.0 are 
      non-definitive, those for 1945.0, 1950.0,...2015.0 are definitive and
@@ -75,7 +77,7 @@ if __name__ == '__main__':
     name = input("Enter filename: ")
     
     if not name:         # is empty 
-        print('Empty')
+        print('Printing to screen')
     else:
         print(name)
      
@@ -91,7 +93,8 @@ if __name__ == '__main__':
         else:
             break
         
-    # Parse the inputs for computing the main field and SV values
+    # Parse the inputs for computing the main field and SV values. 
+    # Convert geodetic to geocentric coordinates if required 
     if iopt == 1:
         date, alt, lat, colat, lon, itype, sd, cd = ioo.option1()
     elif iopt ==2:
@@ -105,19 +108,22 @@ if __name__ == '__main__':
     f = interpolate.interp1d(igrf.time, igrf.coeffs, fill_value='extrapolate')
     coeffs = f(date)    
     
-    # Compute the Br, Btheta and Bphi value for this location 
+    # Compute the main field B_r, B_theta and B_phi value for this location 
     Br, Bt, Bp = iut.synth_values(coeffs.T, alt, colat, lon,
                               igrf.parameters['nmax'])
     
     # For the SV, find the 5 year period in which the date lies and compute
     # the SV within that period. IGRF has constant SV between each 5 year period
-    epoch = (date-1900)//5    # We don't need to subtract 1900 but it makes it clearer
+    # We don't need to subtract 1900 but it makes it clearer:
+    epoch = (date-1900)//5    
     epoch_start = epoch*5
-    coeffs_sv = f(1900+epoch_start+1) - f(1900+epoch_start)   # Add 1900 back on plus 1 year
+    # Add 1900 back on plus 1 year to account for SV in nT per year (nT/yr):
+    coeffs_sv = f(1900+epoch_start+1) - f(1900+epoch_start)   
     Brs, Bts, Bps = iut.synth_values(coeffs_sv.T, alt, colat, lon,
                               igrf.parameters['nmax'])
+    
     # Use the main field coefficients from the start of each five epch
-    # to compute the SV for D,I,H and F 
+    # to compute the SV for Dec,Inc,Hor and Total Field (F) 
     # [Note: these are non-linear components of X, Y and Z so treat separately]
     coeffsm = f(1900+epoch_start);
     Brm, Btm, Bpm = iut.synth_values(coeffsm.T, alt, colat, lon,
@@ -126,7 +132,8 @@ if __name__ == '__main__':
     
     # Rearrange to X, Y, Z components 
     X = -Bt; Y = Bp; Z = -Br
-    dX = -Bts; dY = Bps; dZ = -Brs
+    # For the SV
+    dX = -Bts; dY = Bps; dZ = -Brs 
     Xm = -Btm; Ym = Bpm; Zm = -Brm
     # Rotate back to geodetic coords if needed
     if (itype == 1):
@@ -134,14 +141,14 @@ if __name__ == '__main__':
         t = dX; dX = dX*cd + dZ*sd;  dZ = dZ*cd - t*sd
         t = Xm; Xm = Xm*cd + Zm*sd;  Zm = Zm*cd - t*sd
         
-    # Compute the remaining components 
+    # Compute the fourn non-linear components 
     dec, hoz, inc, eff = iut.xyz2dhif(X,Y,Z)
-    # IGRF SV coefficients are relative to the main field components at the start 
-    # of each five year epoch e.g. 2010, 2015, 2020
+    # The IGRF SV coefficients are relative to the main field components 
+    # at the start of each five year epoch e.g. 2010, 2015, 2020
     decs, hozs, incs, effs = iut.xyz2dhif_sv(Xm, Ym, Zm, dX, dY, dZ)
     
     
-     # Parse the outputs for writing to screen or file
+    # Finallt, parse the outputs for writing to screen or file
     if iopt == 1:
         ioo.write1(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
                   dec, hoz, inc, eff, decs, hozs, incs, effs, itype)

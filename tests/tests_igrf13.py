@@ -10,7 +10,9 @@ Uses pytest
      
     >> py.test igrf13_tests.py
    or 
-   in Spyder: In [1] !py.test igrf13_tests.py
+   in Spyder: In [1]: !py.test tests/igrf13_tests.py
+   or 
+   >> In [1]: !python -m pytest tests
 
 pytest will find these test scripts, run them and alert you to any errors
 
@@ -24,10 +26,11 @@ Test values and examples for running synth_values for IGRF-13
     for d, clt, ln, a in zip(date, lat, lon, alt):
         print('{},{},{},{}'.format(d,clt,ln,a))
 
-    There are 9 tests in total.  Values have bee nhecked independently 
+    There are 9 tests in total.  Values have been checked independently 
     against igrf.f and D. Kerridge Jupyter Notebook implementation (2019)
 
 """
+
 
 from scipy import interpolate
 import igrf_utils as iut
