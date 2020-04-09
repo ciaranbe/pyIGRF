@@ -170,7 +170,7 @@ def option2():
         else:
             break   
 
-    date = np.arange(dates,datee)
+    date = np.arange(dates,datee+1)
     alt = np.ones(len(date),) * alt
     lat = np.ones(len(date),) * lat
     colat = np.ones(len(date),) * colat
