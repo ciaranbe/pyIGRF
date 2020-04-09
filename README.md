@@ -6,4 +6,4 @@ Other options include computing a time-series of values for a location over a nu
 
 The code accepts geodetic (WGS-84) or geocentric coordinates and location values in decimal degree or degrees and minutes. 
 
-IGRF-13 is valid from 01-Jan-1900 to 31-Dec-2025.
+IGRF-13 is valid from 01-Jan-1900 to 31-Dec-2024.
