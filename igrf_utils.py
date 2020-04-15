@@ -7,7 +7,10 @@ Created on Mon Mar 30 21:55:38 2020
  
 Based on code from : chaosmagpy, Clemens Kloss (DTU Space)
                    : spherical harmonic code from David Kerridge (BGS)
-                   : and Ashley Smith (Univ. of Edinburgh)
+                   
+Functions for computing main field, the non-linear coefficients of the field,
+    loading in coefficients files, format checking and coordinate rotation from
+    geodetic to geocentric frame
 
 """
 
@@ -165,8 +168,10 @@ def gg_to_geo(h, gdcolat):
     References
     ----------
     Equations (51)-(53) from "The main field" (chapter 4) by Langel, R. A. in:
-
     "Geomagnetism", Volume 1, Jacobs, J. A., Academic Press, 1987.
+    
+    Malin, S.R.C. and Barraclough, D.R., 1981. An algorithm for synthesizing 
+    the geomagnetic field. Computers & Geosciences, 7(4), pp.401-405.
 
     """
     # Use WGS-84 ellipsoid parameters

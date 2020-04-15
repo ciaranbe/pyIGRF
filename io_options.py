@@ -5,7 +5,7 @@ Created on Thu Apr  2 22:54:35 2020
 
 @author: Ciaran Beggan (British Geological Survey)
 
-A set of functions to deal with the three input options of the IGRF code
+A set of functions to parse the three input options of the IGRF code
          '1 - values at one or more locations & dates'
          '2 - values at yearly intervals at one location'
          '3 - values on a latitude/longitude grid at one date'
@@ -47,7 +47,7 @@ def option1():
         print( 'Enter latitude & longitude in degrees & minutes')
         print( '(if either latitude or longitude is between -1')
         print( 'and 0 degrees, enter the minutes as negative).')
-        print( 'Enter 4 integers' )
+        print( 'Enter integers for degrees, floats for the minutes if needed' )
         LTD,LTM,LND,LNM = input('-> ').rstrip().split(' ')  
         latd = iut.check_int(LTD)
         latm = iut.check_float(LTM)
@@ -301,7 +301,7 @@ def write1(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
         print('Total SV (F)     :', '{: .1f}'.format(effs), 'nT/yr')
         print('North SV (X)     :', '{: .1f}'.format(dX), 'nT/yr')
         print('East SV (Y)      :', '{: .1f}'.format(dY), 'nT/yr')
-        print('Vertical SV (Z)  :', '{: .1f}'.format(dZ), 'nT/tr')
+        print('Vertical SV (Z)  :', '{: .1f}'.format(dZ), 'nT/yr')
     else: # Print to filename 
         with open(name, 'w') as file: 
             file.writelines(['Geomagnetic field values at: ',  str(np.round(lat, decimals=4)) 
@@ -400,7 +400,7 @@ def write3(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
          lat = 90-lat
     
      if not name: # Print to screen
-        print('\nGeomagnetic field values for: ', str(date) + ', at altitude ' 
+        print('\nGeomagnetic field values for: ', str(date[0]) + ', at altitude ' 
             + str(np.round(alt[0], decimals=3)) )
         print('Latitude  Longitude  D(' +degree_sign+')  I(' +degree_sign+')  H(nT)' 
               ' F(nT) X(nT) Y(nT)  Z(nT)     '
@@ -408,7 +408,7 @@ def write3(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
               ' SV_F(nT/yr)  SV_X(nT/yr)  SV_Y(nT/yr)  SV_Z(nT/yr) ' )
          #for loop to write to screen ...
         for i in range(len(lon)):
-            print(str(np.round(lat[i], decimals=4)), str(lon[i]), 
+            print(str(np.round(lat[i], decimals=4)), str(np.round(lon[i], decimals=4)), 
              '{: .3f}'.format(dec[i]),
              '{: .3f}'.format(inc[i]),
              '{: .1f}'.format(hoz[i]), 
@@ -425,7 +425,7 @@ def write3(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
              '{: .1f}'.format(dZ[i]))
      else: # Print to filename 
         with open(name, 'w') as file: 
-            file.writelines(['Geomagnetic field values for: ',  str(date[0]) 
+            file.writelines(['Geomagnetic field values for: ', str(np.round(lon[i], decimals=4)) 
                 + ', at altitude ' 
                 + str(np.round(alt[0], decimals=3)) + '\n'])
             file.writelines(['Latitude Longitude  D(' +degree_sign+')  I(' +degree_sign+')  H(nT)' 

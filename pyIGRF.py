@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 pyIGRF: code to synthesise magnetic field values from the 13th generation of the
-        International Geomagnetic Reference Field, released in December 2020
+        International Geomagnetic Reference Field (IGRF), released in December 2019
 
  @author: Ciaran Beggan (British Geological Survey)
  
@@ -10,40 +10,70 @@ pyIGRF: code to synthesise magnetic field values from the 13th generation of the
  
  Based on existing codes: igrf13.f (FORTRAN) and chaosmagpy (Python3)
  
- With acknowledgements to: Clemens Kloss (DTU Space), David Kerridge (BGS) and
-     Ashley Smith (Univ. of Edinburgh), william Brown and Grace Cox.
+ With acknowledgements to: Clemens Kloss (DTU Space), David Kerridge (BGS),
+      william Brown and Grace Cox.
  
      This is a program for synthesising geomagnetic field values from the 
      International Geomagnetic Reference Field series of models as agreed
      in December 2019 by IAGA Working Group V-MOD. 
      
-     It is the 13th generation IGRF, ie the 12th revision. 
+     This is the 13th generation IGRF.
+     
      The main-field models for 1900.0, 1905.0,..1940.0 and 2020.0 are 
      non-definitive, those for 1945.0, 1950.0,...2015.0 are definitive and
      the secular-variation model for 2020.0 to 2025.0 is non-definitive.
 
-     Main-field models are to degree and order 10 (ie 120 coefficients)
-     for 1900.0-1995.0 and to 13 (ie 195 coefficients) for 2000.0 onwards. 
-     The predictive secular-variation model is to degree and order 8 (ie 80
+     Main-field models are to degree and order 10 (i.e. 120 coefficients)
+     for 1900.0-1995.0 and to 13 (i.e. 195 coefficients) for 2000.0 onwards. 
+     The predictive secular-variation model is to degree and order 8 (i.e. 80
      coefficients).
 
-     Options include values at different locations at different
-     times (spot), values at same location at one year intervals
-     (time series), grid of values at one time (grid); geodetic or
-     geocentric coordinates, latitude & longitude entered as decimal
-     degrees or degrees & minutes (not in grid), and outputs main field 
-     or secular variation or both (grid only).
-
-Dependencies: numpy, scipy
-
+ Inputs:
+ -------
+     Inputs are via the command line:    
+     
+     Options include: 
+         Write to (1) screen or (2) filename          
+    
+    Type of computation:
+         (1) values at a single locations at one time (spot value)
+         (2) values at same location at one year intervals (time series), 
+         (3) grid of values at one time (grid); 
+     
+        Positions can be in:  
+         (1) geodetic (WGS-84)
+         (2) geocentric coordinates
+         
+     Latitude & longitude entered as: 
+         (1) decimal degrees or 
+         (2) degrees & minutes (not in grid)
+    
+     Altitude can be entered as:
+         (1) Geodetic: height above the ellipsoid in km
+         (2) Geocentric: distance from the Earth's centre in km
+        
+     Date: in decimal years (e.g. 2020.25)
+ 
+ Outputs: 
+ -----------
+      : main field (in nanoTesla) and secular variation (in nanoTesla/year)
+ 
+ 
+ Dependencies: 
+ -------------
+     : numpy, scipy
+ 
  Recent history of code:
+ -----------------------
      Initial release: April 2020 (Ciaran Beggan, BGS)
  
+    
 """
 from scipy import interpolate
 import igrf_utils as iut
 import io_options as ioo
 
+# Load in the file of coefficients
 IGRF_FILE = r'./IGRF13.shc'
 igrf = iut.load_shcfile(IGRF_FILE, None)
 
@@ -61,11 +91,11 @@ if __name__ == '__main__':
     print('* Reference Field (13th generation) as revised in    *')
     print('* December 2019 by the IAGA Working Group V-MOD.     *')
     print('*                                                    *')
-    print('* It is valid for dates from 1900.0 to 2025.0,       *')
+    print('* It is valid for dates from 1900.0 to 2025.0;       *')
     print('* values up to 2030.0 will be computed with          *')
     print('* reduced accuracy. Values for dates before 1945.0   *')
-    print('* and after 2015.0 are non-definitive, otherwise the *')
-    print('* values are definitive.                             *')
+    print('* and after 2015.0 are non-definitive, otherwise     *')
+    print('* the values are definitive.                         *')
     print('*                                                    *')
     print('*                                                    *')
     print('*            (on behalf of) IAGA Working Group V-MOD *')
@@ -84,7 +114,7 @@ if __name__ == '__main__':
     
     while 1:
         print( 'Choose an option:')
-        print( '1 - values at one or more locations & dates')
+        print( '1 - values at one location and date')
         print( '2 - values at yearly intervals at one location')
         print( '3 - values on a latitude/longitude grid at one date')
         iopt = input('->')
@@ -108,7 +138,7 @@ if __name__ == '__main__':
     f = interpolate.interp1d(igrf.time, igrf.coeffs, fill_value='extrapolate')
     coeffs = f(date)    
     
-    # Compute the main field B_r, B_theta and B_phi value for this location 
+    # Compute the main field B_r, B_theta and B_phi value for the location(s) 
     Br, Bt, Bp = iut.synth_values(coeffs.T, alt, colat, lon,
                               igrf.parameters['nmax'])
     
@@ -122,8 +152,8 @@ if __name__ == '__main__':
     Brs, Bts, Bps = iut.synth_values(coeffs_sv.T, alt, colat, lon,
                               igrf.parameters['nmax'])
     
-    # Use the main field coefficients from the start of each five epch
-    # to compute the SV for Dec,Inc,Hor and Total Field (F) 
+    # Use the main field coefficients from the start of each five epoch
+    # to compute the SV for Dec, Inc, Hor and Total Field (F) 
     # [Note: these are non-linear components of X, Y and Z so treat separately]
     coeffsm = f(1900+epoch_start);
     Brm, Btm, Bpm = iut.synth_values(coeffsm.T, alt, colat, lon,
@@ -141,14 +171,14 @@ if __name__ == '__main__':
         t = dX; dX = dX*cd + dZ*sd;  dZ = dZ*cd - t*sd
         t = Xm; Xm = Xm*cd + Zm*sd;  Zm = Zm*cd - t*sd
         
-    # Compute the fourn non-linear components 
+    # Compute the four non-linear components 
     dec, hoz, inc, eff = iut.xyz2dhif(X,Y,Z)
     # The IGRF SV coefficients are relative to the main field components 
     # at the start of each five year epoch e.g. 2010, 2015, 2020
     decs, hozs, incs, effs = iut.xyz2dhif_sv(Xm, Ym, Zm, dX, dY, dZ)
     
     
-    # Finallt, parse the outputs for writing to screen or file
+    # Finally, parse the outputs for writing to screen or file
     if iopt == 1:
         ioo.write1(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
                   dec, hoz, inc, eff, decs, hozs, incs, effs, itype)
