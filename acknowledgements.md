@@ -14,11 +14,9 @@ https://github.com/MagneticEarth/IAGA_SummerSchool2019/
 
 This was written by:
 - David J. Kerridge (British Geological Survey, UK) 
-- Ashley R.A. Smith (University of Edinburgh, UK) 
 
 with  contributions from:
 - William Brown (British Geological Survey, UK)
 - Grace Cox (British Geological Survey, UK)
+- Ashley R.A. Smith (University of Edinburgh, UK) 
 
-
-Thanks to 
