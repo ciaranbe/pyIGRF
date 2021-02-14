@@ -70,15 +70,17 @@ pyIGRF: code to synthesise magnetic field values from the 13th generation of the
     
 """
 from scipy import interpolate
-import igrf_utils as iut
-import io_options as ioo
+from pathlib import Path
+
+from . import igrf_utils as iut
+from . import io_options as ioo
 
 # Load in the file of coefficients
-IGRF_FILE = r'./IGRF13.shc'
+IGRF_FILE = Path(__file__).parent.joinpath("IGRF13.shc")
 igrf = iut.load_shcfile(IGRF_FILE, None)
 
 
-if __name__ == '__main__':
+def main():
     # Introduction text and initial option selection
     # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     
@@ -194,4 +196,7 @@ if __name__ == '__main__':
                   dec, hoz, inc, eff, decs, hozs, incs, effs, itype)
         if name:
             print('Written to file: ' + name )
-    
+
+
+if __name__ == "__main__":
+    main()

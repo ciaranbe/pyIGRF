@@ -12,7 +12,7 @@ A set of functions to parse the three input options of the IGRF code
 
 """
 
-import igrf_utils as iut
+from . import igrf_utils as iut
 import numpy as np
 
 degree_sign= u'\N{DEGREE SIGN}'
