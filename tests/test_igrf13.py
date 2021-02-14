@@ -33,13 +33,12 @@ Test values and examples for running synth_values for IGRF-13
 
 
 from scipy import interpolate
-import igrf_utils as iut
+import pyIGRF.igrf_utils as iut
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
 
-IGRF_FILE = r'./IGRF13.shc'
-igrf = iut.load_shcfile(IGRF_FILE, None)
+igrf = iut.load_shcfile()
 f = interpolate.interp1d(igrf.time, igrf.coeffs)
 
 @pytest.mark.parametrize('date, lat, lon, alt, expected_Bxyz',                       
