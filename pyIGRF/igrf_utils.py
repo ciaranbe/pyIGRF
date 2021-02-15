@@ -17,6 +17,7 @@ Functions for computing main field, the non-linear coefficients of the field,
 import os
 import numpy as np
 from numpy import degrees, radians
+from pathlib import Path
 from math import pi
 import warnings
 
@@ -44,7 +45,7 @@ def check_float(s):
         raise ValueError(f'Could not convert {s} to float.')
         
 
-def load_shcfile(filepath, leap_year=None):
+def load_shcfile(filepath=None, leap_year=None):
     """
     Load shc-file and return coefficient arrays.
 
@@ -73,6 +74,10 @@ def load_shcfile(filepath, leap_year=None):
         piecewise polynomial with ``breaks = time[::step]``.
 
     """
+
+    if filepath is None:
+        filepath = Path(__file__).parent.joinpath("IGRF13.shc")
+
     leap_year = True if leap_year is None else leap_year
 
     with open(filepath, 'r') as f:
