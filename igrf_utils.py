@@ -623,6 +623,6 @@ def xyz2dhif_sv(x, y, z, xdot, ydot, zdot):
     hdot = (x*xdot + y*ydot)/h
     fdot = (x*xdot + y*ydot + z*zdot)/np.sqrt(f2)
     ddot = r2d((ydot*x - xdot*y)/h2)*60
-    idot = r2d((h*zdot - hdot*z )/f2)*60
+    idot = r2d((h*zdot - hdot*z)/f2)*60
     
     return ddot, hdot, idot, fdot

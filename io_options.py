@@ -361,19 +361,19 @@ def write2(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
              '{: .1f}'.format(dZ[i]))
      else: # Print to filename 
         with open(name, 'w') as file: 
-            file.writelines(['Geomagnetic field values at: ',  str(np.round(lat, decimals=4)) 
-                + degree_sign +' / ' + str(lon) 
+            file.writelines(['Geomagnetic field values at: ',  str(np.round(lat[0], decimals=4)) 
+                + degree_sign +' / ' + str(lon[0]) 
                 + degree_sign + ', at altitude ' 
-                + str(np.round(alt, decimals=3)) + '\n'])
+                + str(np.round(alt[0], decimals=3)) + '\n'])
             file.writelines(['Date  D(' +degree_sign+')  I(' +degree_sign+')  H(nT)' 
               ' F(nT) X(nT) Y(nT)  Z(nT)     '
               'SV_D(min/yr)  SV_I(min/yr)  SV_H(nT/yr) ' 
               ' SV_F(nT/yr)  SV_X(nT/yr)  SV_Y(nT/yr)  SV_Z(nT/yr) \n'])
             # Write out in a loop
             for i in range(len(date)):
-                file.writelines([str(date[i]), 
-                 '{: 5.2f}'.format(dec[i]),
-                 '{: 5.2f}'.format(inc[i]),
+                file.writelines([str(date[i]), ' ',
+                 '{: 6.2f}'.format(dec[i]),
+                 '{: 6.2f}'.format(inc[i]),
                  '{: 9.1f}'.format(hoz[i]), 
                  '{: 9.1f}'.format(eff[i]),
                  '{: 9.1f}'.format(X[i]), 
@@ -392,8 +392,8 @@ def write2(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
 def write3(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
                   dec, hoz, inc, eff, decs, hozs, incs, effs, itype):
      '''
-     Write out the main field and SV values to screen or a file for a single
-     location for mutliple times
+     Write out the main field and SV values to screen or a file for a grid
+     location for a single time
      '''
      if itype == 1:
          alt, lat = iut.geo_to_gg(alt, colat)
@@ -406,7 +406,7 @@ def write3(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
               ' F(nT) X(nT) Y(nT)  Z(nT)     '
               'SV_D(min/yr)  SV_I(min/yr)  SV_H(nT/yr) ' 
               ' SV_F(nT/yr)  SV_X(nT/yr)  SV_Y(nT/yr)  SV_Z(nT/yr) ' )
-         #for loop to write to screen ...
+         #for loop to write to screen ...         
         for i in range(len(lon)):
             print(str(np.round(lat[i], decimals=4)), str(np.round(lon[i], decimals=4)), 
              '{: .3f}'.format(dec[i]),
@@ -425,18 +425,18 @@ def write3(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
              '{: .1f}'.format(dZ[i]))
      else: # Print to filename 
         with open(name, 'w') as file: 
-            file.writelines(['Geomagnetic field values for: ', str(np.round(lon[i], decimals=4)) 
-                + ', at altitude ' 
-                + str(np.round(alt[0], decimals=3)) + '\n'])
+            file.writelines(['\nGeomagnetic field values for: ', str(date[0]) + ', at altitude ' 
+                             + str(np.round(alt[0], decimals=3)) ])
             file.writelines(['Latitude Longitude  D(' +degree_sign+')  I(' +degree_sign+')  H(nT)' 
               ' F(nT) X(nT) Y(nT)  Z(nT)     '
               'SV_D(min/yr)  SV_I(min/yr)  SV_H(nT/yr) ' 
               ' SV_F(nT/yr)  SV_X(nT/yr)  SV_Y(nT)  SV_Z(nT/yr) \n'])
             # Write out in a loop
-            for i in range(len(date)):
-                file.writelines([str(np.round(lat[i], decimals=4)), str(lon[i]), 
-                 '{: 5.2f}'.format(dec[i]),
-                 '{: 5.2f}'.format(inc[i]),
+            for i in range(len(lon)):
+                file.writelines([str(np.round(lat[i], decimals=4)), ' ', 
+                                 str(np.round(lon[i], decimals=4)), ' ',
+                 '{: 6.2f}'.format(dec[i]),
+                 '{: 6.2f}'.format(inc[i]),
                  '{: 9.1f}'.format(hoz[i]), 
                  '{: 9.1f}'.format(eff[i]),
                  '{: 9.1f}'.format(X[i]), 
