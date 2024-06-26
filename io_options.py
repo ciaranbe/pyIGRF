@@ -275,7 +275,7 @@ def option3():
 
 
 def write1(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
-                  dec, hoz, inc, eff, decs, hozs, incs, effs, itype):
+                  dec, hoz, inc, eff, decs, hozs, incs, effs, itype, igrf_gen):
     '''
     Write out a single lat/long/alt the main field and SV values to screen or a file
     '''
@@ -287,7 +287,8 @@ def write1(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
         print('\nGeomagnetic field values at: ', str(np.round(lat, decimals=4)) 
             + degree_sign  + ' / ' + str(lon) 
             + degree_sign + ', at altitude ' 
-            + str(np.round(alt, decimals=3)) + ' for ' + str(date))
+            + str(np.round(alt, decimals=3)) + ' for ' + str(date) 
+            + ' using IGRF-' + igrf_gen)
         print('Declination (D):', '{: .3f}'.format(dec), degree_sign)
         print('Inclination (I):', '{: .3f}'.format(inc), degree_sign)
         print('Horizontal intensity (H):', '{: .1f}'.format(hoz), 'nT')
@@ -325,7 +326,7 @@ def write1(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
             
             
 def write2(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
-                  dec, hoz, inc, eff, decs, hozs, incs, effs, itype):
+                  dec, hoz, inc, eff, decs, hozs, incs, effs, itype, igrf_gen):
      '''
      Write out the main field and SV values to screen or a file for a single
      location for mutliple times
@@ -338,7 +339,8 @@ def write2(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
         print('\nGeomagnetic field values at: ', str(np.round(lat[0], decimals=4)) 
             + degree_sign  + ' / ' + str(lon[0]) 
             + degree_sign + ', at altitude ' 
-            + str(np.round(alt[0], decimals=3)) )
+            + str(np.round(alt[0], decimals=3)
+            + ' using IGRF-' + igrf_gen))
         print('Date  D(' +degree_sign+')  I(' +degree_sign+')  H(nT)' 
               ' F(nT) X(nT) Y(nT)  Z(nT)     '
               'SV_D(min/yr)  SV_I(min/yr)  SV_H(nT/yr) ' 
@@ -364,7 +366,8 @@ def write2(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
             file.writelines(['Geomagnetic field values at: ',  str(np.round(lat[0], decimals=4)) 
                 + degree_sign +' / ' + str(lon[0]) 
                 + degree_sign + ', at altitude ' 
-                + str(np.round(alt[0], decimals=3)) + '\n'])
+                + str(np.round(alt[0], decimals=3)) 
+                + ' using IGRF-' + igrf_gen + '\n'])
             file.writelines(['Date  D(' +degree_sign+')  I(' +degree_sign+')  H(nT)' 
               ' F(nT) X(nT) Y(nT)  Z(nT)     '
               'SV_D(min/yr)  SV_I(min/yr)  SV_H(nT/yr) ' 
@@ -390,7 +393,7 @@ def write2(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
 
 
 def write3(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
-                  dec, hoz, inc, eff, decs, hozs, incs, effs, itype):
+                  dec, hoz, inc, eff, decs, hozs, incs, effs, itype, igrf_gen):
      '''
      Write out the main field and SV values to screen or a file for a grid
      location for a single time
@@ -401,7 +404,8 @@ def write3(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
     
      if not name: # Print to screen
         print('\nGeomagnetic field values for: ', str(date[0]) + ', at altitude ' 
-            + str(np.round(alt[0], decimals=3)) )
+            + str(np.round(alt[0], decimals=3)) 
+            + ' using IGRF-' + igrf_gen)
         print('Latitude  Longitude  D(' +degree_sign+')  I(' +degree_sign+')  H(nT)' 
               ' F(nT) X(nT) Y(nT)  Z(nT)     '
               'SV_D(min/yr)  SV_I(min/yr)  SV_H(nT/yr) ' 
@@ -426,7 +430,8 @@ def write3(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
      else: # Print to filename 
         with open(name, 'w') as file: 
             file.writelines(['\nGeomagnetic field values for: ', str(date[0]) + ', at altitude ' 
-                             + str(np.round(alt[0], decimals=3)) ])
+                             + str(np.round(alt[0], decimals=3)) 
+                             + ' using IGRF-' + igrf_gen])
             file.writelines(['Latitude Longitude  D(' +degree_sign+')  I(' +degree_sign+')  H(nT)' 
               ' F(nT) X(nT) Y(nT)  Z(nT)     '
               'SV_D(min/yr)  SV_I(min/yr)  SV_H(nT/yr) ' 
