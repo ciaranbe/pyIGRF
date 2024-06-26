@@ -74,6 +74,8 @@ def load_shcfile(filepath, leap_year=None):
 
     """
     leap_year = True if leap_year is None else leap_year
+    
+    read_values_flag = False
 
     with open(filepath, 'r') as f:
 
@@ -84,10 +86,10 @@ def load_shcfile(filepath, leap_year=None):
                 continue
 
             read_line = np.fromstring(line, sep=' ')
-            if read_line.size == 7:
+            if (read_line.size == 7) and not(read_values_flag):
                 name = os.path.split(filepath)[1]  # file name string
-                values = [name] + read_line.astype(np.int).tolist()
-
+                values = [name] + read_line.astype(int).tolist()
+                read_values_flag = True
             else:
                 data = np.append(data, read_line)
 
@@ -392,10 +394,10 @@ def synth_values(coeffs, radius, theta, phi, \
     """
 
     # ensure ndarray inputs
-    coeffs = np.array(coeffs, dtype=np.float)
-    radius = np.array(radius, dtype=np.float) / 6371.2  # Earth's average radius
-    theta = np.array(theta, dtype=np.float)
-    phi = np.array(phi, dtype=np.float)
+    coeffs = np.array(coeffs, dtype=float)
+    radius = np.array(radius, dtype=float) / 6371.2  # Earth's average radius
+    theta = np.array(theta, dtype=float)
+    phi = np.array(phi, dtype=float)
 
     if np.amin(theta) <= 0.0 or np.amax(theta) >= 180.0:
         if np.amin(theta) == 0.0 or np.amax(theta) == 180.0:

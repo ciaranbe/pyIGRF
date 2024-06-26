@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-pyIGRF: code to synthesise magnetic field values from the 13th generation of the
-        International Geomagnetic Reference Field (IGRF), released in December 2019
+pyIGRF: code to synthesise magnetic field values from any generation of the
+        International Geomagnetic Reference Field (IGRF),
 
  @author: Ciaran Beggan (British Geological Survey)
  
@@ -11,14 +11,12 @@ pyIGRF: code to synthesise magnetic field values from the 13th generation of the
  Based on existing codes: igrf13.f (FORTRAN) and chaosmagpy (Python3)
  
  With acknowledgements to: Clemens Kloss (DTU Space), David Kerridge (BGS),
-      william Brown and Grace Cox.
+      William Brown and Grace Cox.
  
      This is a program for synthesising geomagnetic field values from the 
-     International Geomagnetic Reference Field series of models as agreed
-     in December 2019 by IAGA Working Group V-MOD. 
+     International Geomagnetic Reference Field series of models 
      
-     This is the 13th generation IGRF.
-     
+    
      The main-field models for 1900.0, 1905.0,..1940.0 and 2020.0 are 
      non-definitive, those for 1945.0, 1950.0,...2015.0 are definitive and
      the secular-variation model for 2020.0 to 2025.0 is non-definitive.
@@ -28,12 +26,20 @@ pyIGRF: code to synthesise magnetic field values from the 13th generation of the
      The predictive secular-variation model is to degree and order 8 (i.e. 80
      coefficients).
 
+     Older versions of IGRF from generation 1 to 12 can be used. These have 
+     differing spatial resolution. 
+
  Inputs:
  -------
      Inputs are via the command line:    
      
+     Enter IGRF version or generation: 
+	default IGRF-13
+
      Options include: 
          Write to (1) screen or (2) filename          
+    
+    Load in a particular generation of IGRF v1 to v13
     
     Type of computation:
          (1) values at a single locations at one time (spot value)
@@ -66,6 +72,8 @@ pyIGRF: code to synthesise magnetic field values from the 13th generation of the
  Recent history of code:
  -----------------------
      Initial release: April 2020 (Ciaran Beggan, BGS)
+     Corrections in 2020/2021
+     Read in IGRFX.SHC files: Jun 2024
  
     
 """
@@ -73,9 +81,6 @@ from scipy import interpolate
 import igrf_utils as iut
 import io_options as ioo
 
-# Load in the file of coefficients
-IGRF_FILE = r'./IGRF13.shc'
-igrf = iut.load_shcfile(IGRF_FILE, None)
 
 
 if __name__ == '__main__':
@@ -101,6 +106,24 @@ if __name__ == '__main__':
     print('*            (on behalf of) IAGA Working Group V-MOD *')
     print('******************************************************')
     print(' ')
+    print('Enter number of require IGRF generation (1 to 13)')
+    print('or press "Return" for IGRF-13')
+
+    igrf_gen = input("Enter generation number: ")    
+    
+    if not igrf_gen:
+        print('Using IGRF-13 ')
+        igrf_gen = '13'
+    else:        
+        while (int(igrf_gen) < 1) or (int(igrf_gen) > 13):
+            igrf_gen = input("Enter generation number: ") 
+
+
+    # Load in the file of coefficients
+    IGRF_FILE = r'./SHC_files/IGRF' + igrf_gen + '.SHC'
+    igrf = iut.load_shcfile(IGRF_FILE, None)
+    
+    
     print('Enter name of output file')
     print('or press "Return" for output to screen')
       
@@ -181,17 +204,17 @@ if __name__ == '__main__':
     # Finally, parse the outputs for writing to screen or file
     if iopt == 1:
         ioo.write1(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
-                  dec, hoz, inc, eff, decs, hozs, incs, effs, itype)
+                  dec, hoz, inc, eff, decs, hozs, incs, effs, itype, igrf_gen)
         if name:
             print('Written to file: ' + name )
     elif iopt == 2:
         ioo.write2(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
-                  dec, hoz, inc, eff, decs, hozs, incs, effs, itype)
+                  dec, hoz, inc, eff, decs, hozs, incs, effs, itype, igrf_gen)
         if name:
             print('Written to file: ' + name )
     else:
         ioo.write3(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
-                  dec, hoz, inc, eff, decs, hozs, incs, effs, itype)
+                  dec, hoz, inc, eff, decs, hozs, incs, effs, itype, igrf_gen)
         if name:
             print('Written to file: ' + name )
     
