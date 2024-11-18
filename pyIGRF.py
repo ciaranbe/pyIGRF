@@ -17,9 +17,9 @@ pyIGRF: code to synthesise magnetic field values from any generation of the
      International Geomagnetic Reference Field series of models 
      
     
-     The main-field models for 1900.0, 1905.0,..1940.0 and 2020.0 are 
-     non-definitive, those for 1945.0, 1950.0,...2015.0 are definitive and
-     the secular-variation model for 2020.0 to 2025.0 is non-definitive.
+     The main-field models for 1900.0, 1905.0,..1940.0 and 2025.0 are 
+     non-definitive, those for 1945.0, 1950.0,...2020.0 are definitive and
+     the secular-variation model for 2025.0 to 2030.0 is non-definitive.
 
      Main-field models are to degree and order 10 (i.e. 120 coefficients)
      for 1900.0-1995.0 and to 13 (i.e. 195 coefficients) for 2000.0 onwards. 
@@ -34,12 +34,12 @@ pyIGRF: code to synthesise magnetic field values from any generation of the
      Inputs are via the command line:    
      
      Enter IGRF version or generation: 
-	default IGRF-13
+	default IGRF-14
 
      Options include: 
          Write to (1) screen or (2) filename          
     
-    Load in a particular generation of IGRF v1 to v13
+    Load in a particular generation of IGRF v1 to v14
     
     Type of computation:
          (1) values at a single locations at one time (spot value)
@@ -74,6 +74,7 @@ pyIGRF: code to synthesise magnetic field values from any generation of the
      Initial release: April 2020 (Ciaran Beggan, BGS)
      Corrections in 2020/2021
      Read in IGRFX.SHC files: Jun 2024
+     Added IGRF14.SHC file: Nov 2024
  
     
 """
@@ -93,29 +94,29 @@ if __name__ == '__main__':
     print('*                                                    *')
     print('* A program for the computation of geomagnetic       *')
     print('* field elements from the International Geomagnetic  *')
-    print('* Reference Field (13th generation) as revised in    *')
-    print('* December 2019 by the IAGA Working Group V-MOD.     *')
+    print('* Reference Field (14th generation) as revised in    *')
+    print('* December 2024 by the IAGA Working Group V-MOD.     *')
     print('*                                                    *')
-    print('* It is valid for dates from 1900.0 to 2025.0;       *')
-    print('* values up to 2030.0 will be computed with          *')
+    print('* It is valid for dates from 1900.0 to 2030.0;       *')
+    print('* values up to 2035.0 will be computed with          *')
     print('* reduced accuracy. Values for dates before 1945.0   *')
-    print('* and after 2015.0 are non-definitive, otherwise     *')
+    print('* and after 2020.0 are non-definitive, otherwise     *')
     print('* the values are definitive.                         *')
     print('*                                                    *')
     print('*                                                    *')
     print('*            (on behalf of) IAGA Working Group V-MOD *')
     print('******************************************************')
     print(' ')
-    print('Enter number of require IGRF generation (1 to 13)')
-    print('or press "Return" for IGRF-13')
+    print('Enter number of require IGRF generation (1 to 14)')
+    print('or press "Return" for IGRF-14')
 
     igrf_gen = input("Enter generation number: ")    
     
     if not igrf_gen:
-        print('Using IGRF-13 ')
-        igrf_gen = '13'
+        print('Using IGRF-14 ')
+        igrf_gen = '14'
     else:        
-        while (int(igrf_gen) < 1) or (int(igrf_gen) > 13):
+        while (int(igrf_gen) < 1) or (int(igrf_gen) > 14):
             igrf_gen = input("Enter generation number: ") 
 
 

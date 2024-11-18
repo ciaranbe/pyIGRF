@@ -82,9 +82,9 @@ def option1():
             break
         
     while 1: 
-        date = input('Enter decimal date in years 1900-2025: ').rstrip()
+        date = input('Enter decimal date in years 1900-2030: ').rstrip()
         date = iut.check_float(date)
-        if date < 1900 or date > 2030: continue
+        if date < 1900 or date > 2035: continue
         else:
             break   
 
@@ -156,15 +156,15 @@ def option2():
             break
         
     while 1: 
-        dates = input('Enter start decimal date in years 1900-2025: ').rstrip()
+        dates = input('Enter start decimal date in years 1900-2030: ').rstrip()
         dates = iut.check_float(dates)
-        if dates < 1900 or dates > 2030: continue
+        if dates < 1900 or dates > 2035: continue
         else:
             break
     while 1:
-        datee = input('Enter end decimal date in years 1900-2025: ').rstrip()
+        datee = input('Enter end decimal date in years 1900-2030: ').rstrip()
         datee = iut.check_float(datee)
-        if datee < 1900 or datee > 2030: 
+        if datee < 1900 or datee > 2035: 
             continue
         elif datee < dates: continue
         else:
@@ -249,9 +249,9 @@ def option3():
             break
         
     while 1: 
-        date = input('Enter decimal date in years 1900-2025: ').rstrip()
+        date = input('Enter decimal date in years 1900-2030: ').rstrip()
         date = iut.check_float(date)
-        if date < 1900 or date > 2030: continue
+        if date < 1900 or date > 2035: continue
         else:
             break
 
@@ -339,8 +339,8 @@ def write2(name, date, alt, lat, colat, lon, X, Y, Z, dX, dY, dZ, \
         print('\nGeomagnetic field values at: ', str(np.round(lat[0], decimals=4)) 
             + degree_sign  + ' / ' + str(lon[0]) 
             + degree_sign + ', at altitude ' 
-            + str(np.round(alt[0], decimals=3)
-            + ' using IGRF-' + igrf_gen))
+            + str(np.round(alt[0], decimals=3))
+            + ' using IGRF-' + igrf_gen)
         print('Date  D(' +degree_sign+')  I(' +degree_sign+')  H(nT)' 
               ' F(nT) X(nT) Y(nT)  Z(nT)     '
               'SV_D(min/yr)  SV_I(min/yr)  SV_H(nT/yr) ' 
