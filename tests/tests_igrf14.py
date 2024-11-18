@@ -51,8 +51,10 @@ f = interpolate.interp1d(igrf.time, igrf.coeffs)
              (1975, 75, 0, 6550,     np.array([30050.59,-3367.82,  6332.69]) ),
              (1990, 55, 30, 6600,    np.array([25224.81, 1058.25, 30965.61]) ),
              (2005, 35, 60, 6650,    np.array([14718.37, 2842.99, 46050.88]) ),
+             (2010, 170, 0, 6371,    np.array([17529.48, -7143.78,-42722.46]) ),
              (2020, 15, 90, 6700,    np.array([ 3734.07, 1294.17, 50833.13]) ),
-             (2025, 90, 45, 6900,    np.array([25587.26, -826.43, -7422.32]) )
+             (2025, 56, -3, 6375,    np.array([28927.56,  261.98, 30910.08]) ),
+             (2030, 45, -5, 6375,    np.array([22959.82,  224.80, 40764.14]) )             
              ])
 
 def test_synth_values(date, lat, lon, alt, expected_Bxyz ):
@@ -64,3 +66,5 @@ def test_synth_values(date, lat, lon, alt, expected_Bxyz ):
                           igrf.parameters['nmax'])
         foundxyz = np.array([ -found[1], found[2], -found[0] ])
         assert_allclose(foundxyz, expected_Bxyz, rtol=1e-02, atol=1e-02)
+        
+
