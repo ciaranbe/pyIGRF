@@ -2,7 +2,7 @@ pyIGRF is a simple Python package for evaluating any generation of the Internati
 
 The code runs a simple command-line driven menu which allows spot values of the seven main field components (Declination, Inclination, Total Field, Horizontal, North, East and Vertical strength, or D,I,F,H,X,Y,Z) and their respective secular variation to be computed for a given latitude, longitude, altitude and time.
 
-You can also specify the IGRF generation from 1 to 13 (as of June 2024).
+You can also specify the IGRF generation from 1 to 14 (as of November 2024).
 
 Other options include computing a time-series of values for a location over a number of years, or computing values for a grid of latitude and longitude values for a particular date.
 
@@ -17,3 +17,4 @@ Check https://www.ncei.noaa.gov/products/international-geomagnetic-reference-fie
 For example:
 IGRF-1 is valid from 01-Jan-1965 to 31-Dec-1979.
 IGRF-13 is valid from 01-Jan-1900 to 31-Dec-2024.
+IGRF-14 is valid from 01-Jan-1900 to 31-Dec-2029
